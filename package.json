@@ -1,0 +1,22 @@
+{
+  "name": "mobile-shop",
+  "version": "1.0.0",
+  "description": "MERN mobile-shop",
+  "main": "server.js",
+  "scripts": {
+    "start": "node backend/server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ms-online/ms-react-mobile-shop.git"
+  },
+  "author": "msonline",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ms-online/ms-react-mobile-shop/issues"
+  },
+  "homepage": "https://github.com/ms-online/ms-react-mobile-shop#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

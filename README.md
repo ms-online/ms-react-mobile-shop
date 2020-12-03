@@ -1,1 +1,1 @@
-lesson-6:ProductScreen 组件（单个产品）
+lesson-7:搭建服务器
