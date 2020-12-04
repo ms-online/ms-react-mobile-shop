@@ -1,5 +1,6 @@
 import express from 'express'
 import dotenv from 'dotenv'
+import { notFound, errorHandler } from './middleware/errorMiddleware.js'
 import colors from 'colors'
 import connectDB from './config/db.js'
 import prodcutRoutes from './routes/productRoutes.js'
@@ -13,6 +14,9 @@ app.get('/', (req, res) => {
   res.send('服务器已经运行...')
 })
 app.use('/api/products', prodcutRoutes)
+
+app.use(notFound)
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 5000
 
