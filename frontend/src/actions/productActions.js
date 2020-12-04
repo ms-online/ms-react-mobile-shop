@@ -1,4 +1,8 @@
-import { PRODUCT_LIST_REQUEST } from '../contents/productConstents'
+import {
+  PRODUCT_LIST_FAIL,
+  PRODUCT_LIST_REQUEST,
+  PRODUCT_LIST_SUCCESS,
+} from '../contents/productConstents'
 import axios from 'axios'
 
 //获取所有产品action
