@@ -1,6 +1,5 @@
 const products = [
   {
-    _id: '1',
     name: '苹果12 mini 64G',
     image: '/images/iphone-12mini.jpg',
     description:
@@ -13,7 +12,6 @@ const products = [
     numReviews: 5,
   },
   {
-    _id: '2',
     name: '苹果 12  128G',
     image: '/images/iphone-12.jpg',
     description:
@@ -26,7 +24,6 @@ const products = [
     numReviews: 5,
   },
   {
-    _id: '3',
     name: '苹果12 Pro 128G',
     image: '/images/iphone-12pro.jpg',
     description:
@@ -39,7 +36,6 @@ const products = [
     numReviews: 8,
   },
   {
-    _id: '4',
     name: '苹果12 Pro Max 128G',
     image: '/images/iphone-12-pro-max.jpg',
     description:
@@ -52,7 +48,6 @@ const products = [
     numReviews: 5,
   },
   {
-    _id: '5',
     name: '华为 Mate 40 Pro',
     image: '/images/huawei-mate-40-pro.jpg',
     description:
@@ -65,7 +60,6 @@ const products = [
     numReviews: 10,
   },
   {
-    _id: '6',
     name: '华为 P40 Pro',
     image: '/images/huawei-p40-pro.jpg',
     description:
@@ -78,7 +72,6 @@ const products = [
     numReviews: 7,
   },
   {
-    _id: '7',
     name: 'OnePlus 8T',
     image: '/images/one-plus-8t.jpg',
     description:
@@ -91,7 +84,6 @@ const products = [
     numReviews: 10,
   },
   {
-    _id: '8',
     name: '小米 10 至尊 纪念版',
     image: '/images/xiaomi-10.jpg',
     description:
@@ -104,7 +96,6 @@ const products = [
     numReviews: 12,
   },
   {
-    _id: '9',
     name: 'vivo NEX 3S',
     image: '/images/vivo-nex-3s.jpg',
     description:
@@ -117,7 +108,6 @@ const products = [
     numReviews: 9,
   },
   {
-    _id: '10',
     name: 'OPPO Find X2 ',
     image: '/images/oppo-find-x2.jpg',
     description:
