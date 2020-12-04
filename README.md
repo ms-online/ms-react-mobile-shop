@@ -1,1 +1,1 @@
-lesson-24:加载组件&消息组件
+lesson-25:创建获取单个产品的 reducer&action
