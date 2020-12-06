@@ -1,1 +1,1 @@
-lesson-25:创建获取单个产品的 reducer&action
+lesson-26:购买数量&添加到购物车事件
