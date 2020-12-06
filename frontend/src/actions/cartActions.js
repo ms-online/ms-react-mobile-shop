@@ -18,3 +18,12 @@ export const addToCart = (id, qty) => async (dispatch, getState) => {
   //将购买物品添加到本地存储
   localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
 }
+
+//删除产品action
+export const removeFromCart = (id) => async (dispatch, getState) => {
+  dispatch({
+    type: CART_REMOVE_ITEM,
+    payload: id,
+  })
+  localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
+}
