@@ -15,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('服务器已经运行...')
 })
 app.use('/api/products', prodcutRoutes)
-app.use('/api/user', userRoutes)
+app.use('/api/users', userRoutes)
 
 app.use(notFound)
 app.use(errorHandler)
