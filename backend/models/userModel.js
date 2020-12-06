@@ -1,5 +1,5 @@
 import mongoose from 'mongoose'
-
+import bcrypt from 'bcryptjs'
 const userSchema = mongoose.Schema(
   {
     name: {
@@ -25,6 +25,11 @@ const userSchema = mongoose.Schema(
     timestamps: true,
   }
 )
+
+//实现用户密码是否匹配
+userSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password)
+}
 
 const User = mongoose.model('User', userSchema)
 
