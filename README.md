@@ -1,1 +1,1 @@
-lesson-45:更新用户详情 reducer & action
+lesson-46:重置更新用户资料
