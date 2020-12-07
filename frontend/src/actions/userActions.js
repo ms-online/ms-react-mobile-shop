@@ -2,6 +2,7 @@ import {
   USER_LOGIN_FAIL,
   USER_LOGIN_REQUEST,
   USER_LOGIN_SUCCESS,
+  USER_LOGOUT,
 } from '../contents/userContents'
 import axios from 'axios'
 
@@ -33,4 +34,10 @@ export const login = (email, password) => async (dispatch) => {
           : error.message,
     })
   }
+}
+
+//用户退出的action
+export const logout = () => (dispatch) => {
+  localStorage.removeItem('userInfo')
+  dispatch({ type: USER_LOGOUT })
 }
