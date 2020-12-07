@@ -1,4 +1,8 @@
-import { USER_LOGIN_REQUEST } from '../contents/userContents'
+import {
+  USER_LOGIN_FAIL,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_SUCCESS,
+} from '../contents/userContents'
 import axios from 'axios'
 
 //用户登录Action
