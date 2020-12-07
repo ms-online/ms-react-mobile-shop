@@ -1,1 +1,1 @@
-lesson-44:用户详情 reducer & action & screen
+lesson-45:更新用户详情 reducer & action
