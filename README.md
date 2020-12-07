@@ -1,1 +1,1 @@
-lesson-48:创建结账流程组件
+lesson-49:支付方式 reducer & action & screen
