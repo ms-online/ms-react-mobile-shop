@@ -6,12 +6,13 @@ import {
   productDeatilsReducer,
 } from './reducers/productReducers'
 import { cartReducer } from './reducers/cartReducers'
-import { userLoginReducer } from './reducers/userReducers'
+import { userLoginReducer, userRegisterReducer } from './reducers/userReducers'
 const reducer = combineReducers({
   productList: productListReducer,
   productDetails: productDeatilsReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
+  userRegister: userRegisterReducer,
 })
 
 //获取本地存储的购物车信息

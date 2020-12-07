@@ -1,1 +1,1 @@
-lesson-41:创建导航栏用户下拉框
+lesson-42:用户注册 reducer & action & screen
