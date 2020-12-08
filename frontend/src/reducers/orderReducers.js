@@ -23,7 +23,7 @@ export const orderCreateReducer = (state = {}, action) => {
 
 //获取订单reducer
 export const orderDetailsReducer = (
-  state = { orderItems: [], shippingAddress: {} },
+  state = { loading: true, orderItems: [], shippingAddress: {} },
   action
 ) => {
   switch (action.type) {
