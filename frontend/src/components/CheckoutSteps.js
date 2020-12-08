@@ -35,10 +35,10 @@ const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
       <Nav.Item>
         {step4 ? (
           <LinkContainer to='/placeorder'>
-            <Nav.Link>确认下单</Nav.Link>
+            <Nav.Link>确认订单</Nav.Link>
           </LinkContainer>
         ) : (
-          <Nav.Link disabled>确认下单</Nav.Link>
+          <Nav.Link disabled>确认订单</Nav.Link>
         )}
       </Nav.Item>
     </Nav>
