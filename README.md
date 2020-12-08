@@ -1,1 +1,1 @@
-lesson-49:支付方式 reducer & action & screen
+lesson-50:确认订单界面
