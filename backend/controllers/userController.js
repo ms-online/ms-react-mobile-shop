@@ -97,4 +97,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error('用户不存在')
   }
 })
-export { registerUser, authUser, getUserProfile, updateUserProfile }
+
+//@desc    获取所有注册用户
+//@route   GET/api/users
+//@access  私密(仅限管理员)
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({})
+  res.json(users)
+})
+export { registerUser, authUser, getUserProfile, updateUserProfile, getUsers }
