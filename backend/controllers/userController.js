@@ -105,4 +105,25 @@ const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({})
   res.json(users)
 })
-export { registerUser, authUser, getUserProfile, updateUserProfile, getUsers }
+
+//@desc    删除注册用户
+//@route   DELETE/api/users/:id
+//@access  私密(仅限管理员)
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+  if (user) {
+    await user.remove()
+    res.json({ message: '用户已删除' })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+export {
+  registerUser,
+  authUser,
+  getUserProfile,
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+}
