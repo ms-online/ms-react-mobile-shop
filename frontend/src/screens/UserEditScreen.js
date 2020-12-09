@@ -4,8 +4,9 @@ import { Form, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { getUserDetails } from '../actions/userActions'
+import { getUserDetails, updateUser } from '../actions/userActions'
 import FormContainer from '../components/FormContainer'
+import { USER_UPDATE_RESET } from '../contents/userContents'
 
 const UserEditScreen = ({ match, history }) => {
   const userId = match.params.id
@@ -18,18 +19,31 @@ const UserEditScreen = ({ match, history }) => {
   const userDetails = useSelector((state) => state.userDetails)
   const { loading, error, user } = userDetails
 
+  const userUpdate = useSelector((state) => state.userUpdate)
+  const {
+    loading: loadingUpdate,
+    error: errorUpdate,
+    success: successUpdate,
+  } = userUpdate
+
   useEffect(() => {
-    if (!user.name || user._id !== userId) {
-      dispatch(getUserDetails(userId))
+    if (successUpdate) {
+      dispatch({ type: USER_UPDATE_RESET })
+      history.push('/admin/userlist')
     } else {
-      setName(user.name)
-      setEmail(user.email)
-      setIsAdmin(user.isAdmin)
+      if (!user.name || user._id !== userId) {
+        dispatch(getUserDetails(userId))
+      } else {
+        setName(user.name)
+        setEmail(user.email)
+        setIsAdmin(user.isAdmin)
+      }
     }
-  }, [dispatch, userId, user])
+  }, [dispatch, history, userId, user, successUpdate])
   //表单提交函数
   const submitHandler = (e) => {
     e.preventDefault()
+    dispatch(updateUser({ _id: userId, name, email, isAdmin }))
   }
   return (
     <FormContainer>
@@ -37,6 +51,8 @@ const UserEditScreen = ({ match, history }) => {
         返回上一页
       </Link>
       <h1>编辑用户界面</h1>
+      {loadingUpdate && <Loader />}
+      {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
       {loading ? (
         <Loader />
       ) : error ? (
