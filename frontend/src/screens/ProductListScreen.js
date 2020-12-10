@@ -4,8 +4,12 @@ import { Table, Button, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { listProducts, deleteProduct } from '../actions/productActions'
-
+import {
+  listProducts,
+  deleteProduct,
+  createProduct,
+} from '../actions/productActions'
+import { PRODUCT_CREATE_RESET } from '../contents/productConstents'
 const ProductListScreen = ({ history }) => {
   const dispatch = useDispatch()
   const productList = useSelector((state) => state.productList)
@@ -18,14 +22,32 @@ const ProductListScreen = ({ history }) => {
     error: errorDelete,
     success: successDelete,
   } = productDelete
+  const productCreate = useSelector((state) => state.productCreate)
+  const {
+    loading: loadingCreate,
+    error: errorCreate,
+    success: successCreate,
+    product: createdProduct,
+  } = productCreate
 
   useEffect(() => {
-    if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts())
-    } else {
+    dispatch({ type: PRODUCT_CREATE_RESET })
+    if (!userInfo.isAdmin) {
       history.push('/login')
     }
-  }, [dispatch, history, userInfo, successDelete])
+    if (successCreate) {
+      history.push(`/admin/product/${createdProduct._id}/edit`)
+    } else {
+      dispatch(listProducts())
+    }
+  }, [
+    dispatch,
+    history,
+    userInfo,
+    successDelete,
+    successCreate,
+    createdProduct,
+  ])
 
   //删除产品函数
   const deleteHandler = (id) => {
@@ -37,6 +59,7 @@ const ProductListScreen = ({ history }) => {
   //创建产品函数
   const createProductHandler = () => {
     //创建产品
+    dispatch(createProduct())
   }
   return (
     <>
@@ -51,6 +74,10 @@ const ProductListScreen = ({ history }) => {
           </Button>
         </Col>
       </Row>
+      {loadingCreate && <Loader />}
+      {errorCreate && (
+        <Message variant='danger'>{errorCreateloadingCreate}</Message>
+      )}
       {loadingDelete && <Loader />}
       {errorDelete && <Message variant='danger'>{errorDelete}</Message>}
       {loading ? (
