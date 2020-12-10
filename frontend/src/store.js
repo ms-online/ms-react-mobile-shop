@@ -21,6 +21,7 @@ import {
 import {
   orderCreateReducer,
   orderDetailsReducer,
+  orderListReducer,
 } from './reducers/orderReducers'
 const reducer = combineReducers({
   productList: productListReducer,
@@ -38,6 +39,7 @@ const reducer = combineReducers({
   userUpdate: userUpdateReducer,
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
+  orderList: orderListReducer,
 })
 
 //获取本地存储的购物车信息
