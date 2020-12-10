@@ -6,13 +6,13 @@ const router = express.Router()
 
 //创建磁盘存储引擎
 const storage = multer.diskStorage({
-  destionaton(req, file, cb) {
+  destination(req, file, cb) {
     cb(null, 'uploads/')
   },
   filename(req, file, cb) {
     cb(
       null,
-      `${file.fieldname} - ${Date.now()}${path.extname(file.originalname)}`
+      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
     )
   },
 })
@@ -28,7 +28,7 @@ const checkFileType = (file, cb) => {
   if (mimetype && extname) {
     return cb(null, true)
   } else {
-    cb('仅限图片格式！')
+    cb(new Error('仅限图片格式'))
   }
 }
 
