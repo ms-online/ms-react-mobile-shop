@@ -88,10 +88,50 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 })
 
+//@desc    创建产品评论
+//@route   POST/api/products/:id/reviews
+//@access  私密
+const createProductReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+  const product = await Product.findById(req.params.id)
+
+  if (product) {
+    //判断用户是否已经评论
+    const alreadeReviewed = product.reviews.find(
+      (review) => review.user.toString() === req.user._id.toString()
+    )
+
+    if (alreadeReviewed) {
+      res.status(400)
+      throw new Error('您已经评论过该产品！')
+    }
+
+    //创建新评论
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+    product.reviews.push(review)
+    //更新产品的评论数及总评分
+    product.numReviews = product.reviews.length
+    product.rating =
+      product.reviews.reduce((acc, review) => acc + review.rating, 0) /
+      product.reviews.length
+
+    await product.save()
+    res.status(201).json({ message: '评论成功' })
+  } else {
+    res.status(404)
+    throw new Error('查询不到产品')
+  }
+})
 export {
   getProducts,
   getProductById,
   deleteProduct,
   createProduct,
   updateProduct,
+  createProductReview,
 }
