@@ -37,15 +37,14 @@ const PaymenScreen = ({ history }) => {
               checked
               onChange={(e) => setPaymentMethod(e.target.value)}
             ></Form.Check>
-            {/* <Form.Check
+            <Form.Check
               type='radio'
-              label='支付宝'
-              id='支付宝'
+              label='PayPal'
+              id='PayPal'
               name='paymenMethod'
-              value='支付宝'
-              checked
+              value='PayPal'
               onChange={(e) => setPaymentMethod(e.target.value)}
-            ></Form.Check> */}
+            ></Form.Check>
           </Col>
         </Form.Group>
         <Button type='submit' variant='primary'>
