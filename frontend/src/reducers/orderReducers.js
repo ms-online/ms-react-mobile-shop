@@ -8,6 +8,10 @@ import {
   ORDER_LIST_FAIL,
   ORDER_LIST_REQUEST,
   ORDER_LIST_SUCCESS,
+  ORDER_PAY_FAIL,
+  ORDER_PAY_REQUEST,
+  ORDER_PAY_RESET,
+  ORDER_PAY_SUCCESS,
 } from '../contents/orderContents'
 
 //创建订单reducer
@@ -50,6 +54,22 @@ export const orderListReducer = (state = { orders: [] }, action) => {
       return { loading: false, orders: action.payload }
     case ORDER_LIST_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+//订单支付后更新订单的reducer
+export const orderPayReducer = (state = {}, action) => {
+  switch (action.type) {
+    case ORDER_PAY_REQUEST:
+      return { loading: true }
+    case ORDER_PAY_SUCCESS:
+      return { loading: false, success: true }
+    case ORDER_PAY_FAIL:
+      return { loading: false, error: action.payload }
+    case ORDER_PAY_RESET:
+      return {}
     default:
       return state
   }

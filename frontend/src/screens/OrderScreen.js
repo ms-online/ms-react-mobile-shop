@@ -11,12 +11,14 @@ import {
   Modal,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetails } from '../actions/orderActions'
+import { getOrderDetails, payOrder } from '../actions/orderActions'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import axios from 'axios'
+import { ORDER_PAY_RESET } from '../contents/orderContents'
+import { v4 as uuidv4 } from 'uuid'
 
-const OrderScreen = ({ match }) => {
+const OrderScreen = ({ match, history }) => {
   const orderId = match.params.id
   const dispatch = useDispatch()
   //弹出框的状态
@@ -25,8 +27,14 @@ const OrderScreen = ({ match }) => {
   const [image, setImage] = useState('')
   const [text, setText] = useState('请扫码')
 
+  const userLogin = useSelector((state) => state.userLogin)
+  const { userInfo } = userLogin
+
   const orderDetails = useSelector((state) => state.orderDetails)
   const { order, loading, error } = orderDetails
+
+  const orderPay = useSelector((state) => state.orderPay)
+  const { loading: loadingPay, error: errorPay, success: successPay } = orderPay
 
   //计算价格
   if (!loading) {
@@ -38,9 +46,16 @@ const OrderScreen = ({ match }) => {
     )
   }
   useEffect(() => {
-    if (!order || order._id !== orderId) dispatch(getOrderDetails(orderId))
+    if (!userInfo) {
+      history.push('/login')
+    }
+    if (!order || order._id !== orderId || successPay) {
+      dispatch({ type: ORDER_PAY_RESET })
+      dispatch(getOrderDetails(orderId))
+    }
+
     // eslint-disable-next-line
-  }, [order, orderId])
+  }, [dispatch, history, userInfo, order, orderId, successPay])
 
   //创建开启和关闭弹出框的函数
   const handleClose = () => {
@@ -61,7 +76,17 @@ const OrderScreen = ({ match }) => {
         } else if (res.data.status === 1) {
           setText('您已经完成了扫码，请支付')
         } else if (res.data.status === 2) {
+          //创建支付结果对象
+          const paymentResult = {
+            id: uuidv4(),
+            status: res.data.status,
+            updata_time: Date.now(),
+            email_address: order.user.email,
+          }
+          //更新完成支付的订单
+          dispatch(payOrder(orderId, paymentResult))
           setText('您已经支付成功，请等待发货')
+          setShow(false)
           clearTimeout(timer)
         }
       })
@@ -113,7 +138,7 @@ const OrderScreen = ({ match }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>支付时间：{order.PaidAt}</Message>
+                <Message variant='success'>支付时间：{order.paidAt}</Message>
               ) : (
                 <Message variant='danger'>待支付</Message>
               )}
