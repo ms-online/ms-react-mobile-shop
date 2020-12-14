@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { PayPalButton } from 'react-paypal-button-v2'
 import { Link } from 'react-router-dom'
 import {
   Form,
@@ -26,6 +27,8 @@ const OrderScreen = ({ match, history }) => {
   //支付二维码图片
   const [image, setImage] = useState('')
   const [text, setText] = useState('请扫码')
+  //SDK
+  const [SDK, setSDK] = useState(false)
 
   const userLogin = useSelector((state) => state.userLogin)
   const { userInfo } = userLogin
@@ -46,12 +49,32 @@ const OrderScreen = ({ match, history }) => {
     )
   }
   useEffect(() => {
+    //动态创建paypalscript
+    const addPayPalScript = async () => {
+      const { data: clientId } = await axios.get('/api/config/paypal')
+      console.log(clientId)
+      const script = document.createElement('script')
+      script.type = 'text/javascript'
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      script.async = true
+
+      script.onload = () => {
+        setSDK(true)
+      }
+      document.body.appendChild(script)
+    }
     if (!userInfo) {
       history.push('/login')
     }
     if (!order || order._id !== orderId || successPay) {
       dispatch({ type: ORDER_PAY_RESET })
       dispatch(getOrderDetails(orderId))
+    } else if (!order.isPaid) {
+      if (!window.paypal) {
+        addPayPalScript()
+      } else {
+        setSDK(true)
+      }
     }
 
     // eslint-disable-next-line
@@ -93,6 +116,11 @@ const OrderScreen = ({ match, history }) => {
     }, 1000)
   }
 
+  //创建paypal支付btn的函数
+  const successPaymentHandler = (paymentResult) => {
+    console.log(paymentResult)
+    dispatch(payOrder(orderId, paymentResult))
+  }
   return loading ? (
     <Loader />
   ) : error ? (
@@ -202,43 +230,63 @@ const OrderScreen = ({ match, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              <ListGroup.Item>
-                <Button
-                  type='button'
-                  className='btn-block'
-                  onClick={handlePayment}
-                  disabled={order.orderItems === 0}
-                >
-                  去支付
-                </Button>
-                <Modal show={show} onHide={handleClose}>
-                  <Modal.Header closeButton>
-                    <Modal.Title>订单号：{order._id}</Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <p>支付金额： ¥{order.totalPrice}</p>
-                    <p>支付方式： {order.paymentMethod}</p>
-                    <Row>
-                      <Col md={6} style={{ textAlign: 'center' }}>
-                        <Image src={image} />
-                        <p
-                          style={{ backgroundColor: '#00C800', color: 'white' }}
-                        >
-                          {text}
-                        </p>
-                      </Col>
-                      <Col>
-                        <Image src='/images/saoyisao.jpg' />
-                      </Col>
-                    </Row>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button variant='primary' onClick={handleClose}>
-                      关闭
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
-              </ListGroup.Item>
+              {/* PayPal支付BTN */}
+              {loadingPay && <Loader />}
+              {order.paymentMethod === 'PayPal' && (
+                <ListGroup.Item>
+                  {!SDK ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order.totalPrice}
+                      onSuccess={successPaymentHandler}
+                    ></PayPalButton>
+                  )}
+                </ListGroup.Item>
+              )}
+              {order.paymentMethod === '微信' && (
+                <ListGroup.Item>
+                  {/* 微信支付BTN */}
+                  <Button
+                    type='button'
+                    className='btn-block'
+                    onClick={handlePayment}
+                    disabled={order.orderItems === 0}
+                  >
+                    去支付
+                  </Button>
+                  <Modal show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                      <Modal.Title>订单号：{order._id}</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                      <p>支付金额： ¥{order.totalPrice}</p>
+                      <p>支付方式： {order.paymentMethod}</p>
+                      <Row>
+                        <Col md={6} style={{ textAlign: 'center' }}>
+                          <Image src={image} />
+                          <p
+                            style={{
+                              backgroundColor: '#00C800',
+                              color: 'white',
+                            }}
+                          >
+                            {text}
+                          </p>
+                        </Col>
+                        <Col>
+                          <Image src='/images/saoyisao.jpg' />
+                        </Col>
+                      </Row>
+                    </Modal.Body>
+                    <Modal.Footer>
+                      <Button variant='primary' onClick={handleClose}>
+                        关闭
+                      </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

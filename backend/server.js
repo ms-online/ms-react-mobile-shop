@@ -31,6 +31,11 @@ app.get('/status', (req, res) => {
   })
 })
 
+//获取paypal的clientID
+app.get('/api/config/paypal', (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID)
+})
+
 app.use('/api/products', prodcutRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/orders', orderRoutes)
