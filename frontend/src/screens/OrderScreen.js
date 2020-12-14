@@ -48,6 +48,7 @@ const OrderScreen = ({ match }) => {
   }
 
   const handlePayment = () => {
+    //获取微信返回的支付二维码图片
     setImage('https://www.thenewstep.cn/pay/index.php?' + 'pid=' + order._id)
     setShow(true)
 
