@@ -34,7 +34,7 @@ const orderSchema = mongoose.Schema(
       id: { type: String },
       status: { type: String },
       updata_time: { type: String },
-      wechat_address: { type: String },
+      email_address: { type: String },
     },
     isDelivered: { type: Boolean, required: true, default: false },
     deliveredAt: { type: Date },
