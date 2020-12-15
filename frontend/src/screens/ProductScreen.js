@@ -15,7 +15,10 @@ import {
   listProductDetails,
   createProductReview,
 } from '../actions/productActions'
-import { PRODUCT_CREATE_REVIEW_RESET } from '../contents/productConstents'
+import {
+  PRODUCT_CREATE_REVIEW_RESET,
+  PRODUCT_DETAILS_RESET,
+} from '../contents/productConstents'
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
@@ -51,6 +54,7 @@ const ProductScreen = ({ history, match }) => {
       product._id !== match.params.id ||
       successProductReview
     ) {
+      dispatch({ type: PRODUCT_DETAILS_RESET })
       dispatch(listProductDetails(match.params.id))
       dispatch({ type: PRODUCT_CREATE_REVIEW_RESET })
     }

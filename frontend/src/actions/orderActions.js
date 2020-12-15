@@ -20,6 +20,7 @@ import {
 } from '../contents/orderContents'
 import axios from 'axios'
 import { logout } from '../actions/userActions'
+import { CART_CLEAR_ITEMS } from '../contents/cartConstents'
 //创建订单Action
 export const createOrder = (order) => async (dispatch, getState) => {
   try {
@@ -39,6 +40,7 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
     const { data } = await axios.post(`/api/orders`, order, config)
     dispatch({ type: ORDER_CREATE_SUCCESS, payload: data })
+    dispatch({ type: CART_CLEAR_ITEMS })
   } catch (error) {
     dispatch({
       type: ORDER_CREATE_FAIL,

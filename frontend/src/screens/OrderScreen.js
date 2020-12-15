@@ -244,10 +244,10 @@ const OrderScreen = ({ match, history }) => {
                 </Row>
               </ListGroup.Item>
               {/* PayPal支付BTN */}
-              {!order.isPaid && (
+              {!order.isPaid && order.paymentMethod === 'PayPal' && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
-                  {order.paymentMethod === 'PayPal' && !SDK ? (
+                  {!SDK ? (
                     <Loader />
                   ) : (
                     <PayPalButton
