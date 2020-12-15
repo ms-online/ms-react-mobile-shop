@@ -5,6 +5,9 @@ import Product from '../models/productModel.js'
 //@route   GET/api/products?keyword=${keyword}
 //@access  公开
 const getProducts = asyncHandler(async (req, res) => {
+  //每页展示的产品数量
+  const pageSize = 6
+  const page = Number(req.query.pageNumber) || 1
   const keyword = req.query.keyword
     ? {
         name: {
@@ -14,8 +17,12 @@ const getProducts = asyncHandler(async (req, res) => {
       }
     : {}
 
+  //获取产品数量（包括符合条件的关键词）
+  const count = await Product.countDocuments({ ...keyword })
   const products = await Product.find({ ...keyword })
-  res.json(products)
+    .limit(pageSize)
+    .skip(pageSize * (page - 1))
+  res.json({ products, page, pages: Math.ceil(count / pageSize) })
 })
 
 //@desc    请求单个产品
