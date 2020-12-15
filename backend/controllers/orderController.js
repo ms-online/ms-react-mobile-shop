@@ -78,4 +78,18 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
   }
 })
 
-export { addOrderItems, getOrderById, getOrders, updateOrderToPaid }
+//@desc    获取登录用户的订单
+//@route   GET/api/orders/myorders
+//@access  私密
+const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id })
+  res.json(orders)
+})
+
+export {
+  addOrderItems,
+  getOrderById,
+  getOrders,
+  updateOrderToPaid,
+  getMyOrders,
+}
