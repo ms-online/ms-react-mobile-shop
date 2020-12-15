@@ -56,7 +56,7 @@ const getOrders = asyncHandler(async (req, res) => {
   res.json(orders)
 })
 
-//@desc    更新支付的订单
+//@desc    更新支付的订单付款状态
 //@route   PUT/api/orders/:id/pay
 //@access  私密
 const updateOrderToPaid = asyncHandler(async (req, res) => {
@@ -70,6 +70,23 @@ const updateOrderToPaid = asyncHandler(async (req, res) => {
       update_time: req.body.update_time,
       email_address: req.body.email_address,
     }
+    const updatedOrder = await order.save()
+    res.json(updatedOrder)
+  } else {
+    res.status(404)
+    throw new Error('查找不到订单')
+  }
+})
+
+//@desc    更新支付的订单的发货状态
+//@route   PUT/api/orders/:id/deliver
+//@access  私密（仅限管理员）
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id)
+  if (order) {
+    order.isDelivered = true
+    order.deliveredAt = Date.now()
+
     const updatedOrder = await order.save()
     res.json(updatedOrder)
   } else {
@@ -92,4 +109,5 @@ export {
   getOrders,
   updateOrderToPaid,
   getMyOrders,
+  updateOrderToDelivered,
 }

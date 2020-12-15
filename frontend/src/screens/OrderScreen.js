@@ -12,11 +12,15 @@ import {
   Modal,
 } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { getOrderDetails, payOrder } from '../actions/orderActions'
+import {
+  getOrderDetails,
+  payOrder,
+  deliverOrder,
+} from '../actions/orderActions'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
 import axios from 'axios'
-import { ORDER_PAY_RESET } from '../contents/orderContents'
+import { ORDER_PAY_RESET, ORDER_DELIVER_RESET } from '../contents/orderContents'
 import { v4 as uuidv4 } from 'uuid'
 
 const OrderScreen = ({ match, history }) => {
@@ -38,6 +42,9 @@ const OrderScreen = ({ match, history }) => {
 
   const orderPay = useSelector((state) => state.orderPay)
   const { loading: loadingPay, error: errorPay, success: successPay } = orderPay
+
+  const orderDeliver = useSelector((state) => state.orderDeliver)
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
 
   //计算价格
   if (!loading) {
@@ -66,8 +73,9 @@ const OrderScreen = ({ match, history }) => {
     if (!userInfo) {
       history.push('/login')
     }
-    if (!order || order._id !== orderId || successPay) {
+    if (!order || order._id !== orderId || successPay || successDeliver) {
       dispatch({ type: ORDER_PAY_RESET })
+      dispatch({ type: ORDER_DELIVER_RESET })
       dispatch(getOrderDetails(orderId))
     } else if (!order.isPaid) {
       if (!window.paypal) {
@@ -78,7 +86,7 @@ const OrderScreen = ({ match, history }) => {
     }
 
     // eslint-disable-next-line
-  }, [dispatch, history, userInfo, order, orderId, successPay])
+  }, [dispatch, history, userInfo, order, orderId, successPay, successDeliver])
 
   //创建开启和关闭弹出框的函数
   const handleClose = () => {
@@ -121,6 +129,11 @@ const OrderScreen = ({ match, history }) => {
     console.log(paymentResult)
     dispatch(payOrder(orderId, paymentResult))
   }
+
+  //创建点击发货btn的函数
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order))
+  }
   return loading ? (
     <Loader />
   ) : error ? (
@@ -152,7 +165,7 @@ const OrderScreen = ({ match, history }) => {
               </p>
               {order.isDelivered ? (
                 <Message variant='success'>
-                  发货时间：{order.DeliveredAt}
+                  发货时间：{order.deliveredAt}
                 </Message>
               ) : (
                 <Message variant='danger'>未发货</Message>
@@ -231,10 +244,10 @@ const OrderScreen = ({ match, history }) => {
                 </Row>
               </ListGroup.Item>
               {/* PayPal支付BTN */}
-              {loadingPay && <Loader />}
-              {order.paymentMethod === 'PayPal' && (
+              {!order.isPaid && (
                 <ListGroup.Item>
-                  {!SDK ? (
+                  {loadingPay && <Loader />}
+                  {order.paymentMethod === 'PayPal' && !SDK ? (
                     <Loader />
                   ) : (
                     <PayPalButton
@@ -244,7 +257,7 @@ const OrderScreen = ({ match, history }) => {
                   )}
                 </ListGroup.Item>
               )}
-              {order.paymentMethod === '微信' && (
+              {!order.isPaid && order.paymentMethod === '微信' && (
                 <ListGroup.Item>
                   {/* 微信支付BTN */}
                   <Button
@@ -287,6 +300,22 @@ const OrderScreen = ({ match, history }) => {
                   </Modal>
                 </ListGroup.Item>
               )}
+
+              {/* 发货BTN */}
+              {userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered && (
+                  <ListGroup.Item>
+                    <Button
+                      type='button'
+                      className='btn-block'
+                      onClick={deliverHandler}
+                    >
+                      发货
+                    </Button>
+                  </ListGroup.Item>
+                )}
             </ListGroup>
           </Card>
         </Col>
