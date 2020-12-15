@@ -143,6 +143,15 @@ const createProductReview = asyncHandler(async (req, res) => {
     throw new Error('查询不到产品')
   }
 })
+
+//@desc    请求排名前3的产品
+//@route   GET/api/products/top
+//@access  公开
+const getTopProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({}).sort({ price: 1 }).limit(3)
+
+  res.json(products)
+})
 export {
   getProducts,
   getProductById,
@@ -150,4 +159,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 }

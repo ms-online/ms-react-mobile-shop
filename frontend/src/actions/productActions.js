@@ -14,6 +14,9 @@ import {
   PRODUCT_LIST_FAIL,
   PRODUCT_LIST_REQUEST,
   PRODUCT_LIST_SUCCESS,
+  PRODUCT_TOP_FAIL,
+  PRODUCT_TOP_REQUEST,
+  PRODUCT_TOP_SUCCESS,
   PRODUCT_UPDATE_FAIL,
   PRODUCT_UPDATE_REQUEST,
   PRODUCT_UPDATE_SUCCESS,
@@ -183,6 +186,23 @@ export const createProductReview = (productId, review) => async (
   } catch (error) {
     dispatch({
       type: PRODUCT_CREATE_REVIEW_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+//获取排名前三的产品action
+export const listTopProducts = () => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_TOP_REQUEST })
+    const { data } = await axios.get(`/api/products/top`)
+
+    dispatch({ type: PRODUCT_TOP_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_TOP_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
