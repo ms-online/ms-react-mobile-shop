@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Row, Col, Alert } from 'react-bootstrap'
 import Product from '../components/Product'
@@ -7,6 +8,7 @@ import Loader from '../components/Loader'
 import Message from '../components/Message'
 import Paginate from '../components/Paginate'
 import ProductsCarousel from '../components/ProductsCarousel'
+import Meta from '../components/Meta'
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword
@@ -21,7 +23,14 @@ const HomeScreen = ({ match }) => {
 
   return (
     <>
-      {!keyword && <ProductsCarousel />}
+      <Meta />
+      {!keyword ? (
+        <ProductsCarousel />
+      ) : (
+        <Link to='/' className='btn btn-dark'>
+          返回上一页
+        </Link>
+      )}
       <h1>最新产品</h1>
       {loading ? (
         <Loader />
