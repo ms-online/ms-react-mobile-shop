@@ -20,10 +20,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'))
 }
 
-app.get('/', (req, res) => {
-  res.send('服务器已经运行...')
-})
-
 //获取支付的status状态码
 app.get('/status', (req, res) => {
   axios.get('https://www.thenewstep.cn/pay/logs/log.txt').then((response) => {
@@ -44,6 +40,18 @@ app.use('/api/upload', uploadRoutes)
 //upload文件夹作为静态文件
 const __dirname = path.resolve()
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')))
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  })
+} else {
+  app.get('/', (req, res) => {
+    res.send('服务器已经运行...')
+  })
+}
 
 app.use(notFound)
 app.use(errorHandler)
