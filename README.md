@@ -11,11 +11,11 @@
 
 在根目录中创建一个.env 文件，然后添加以下内容
 ```
-NODE_ENV = development
-PORT = 5000
-MONGO_URI = 你自己的 mongodb uri /（应用测试使用：mongodb+srv://admin:admin@react-shop.lydooyw.mongodb.net/?retryWrites=true&w=majority&appName=react-shop）
-JWT_SECRET = 'abc123'
-PAYPAL_CLIENT_ID = 你的 paypal client id
+NODE_ENV=development
+PORT=5000
+MONGO_URI=mongodb+srv://admin:admin@react-shop.lydooyw.mongodb.net/?retryWrites=true&w=majority&appName=react-shop
+JWT_SECRET=abc123
+PAYPAL_CLIENT_ID=Aes2cyBWNlM_ddxT1Vxr7ClWUmJTrtHkk5cGio2
 ```
 
 ### 安装依赖项（前端和后端）
