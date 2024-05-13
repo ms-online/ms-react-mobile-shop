@@ -13,7 +13,7 @@
 
 NODE_ENV = development
 PORT = 5000
-MONGO_URI = 你自己的 mongodb uri /（应用测试使用：mongodb+srv://msonline123:msonline123@msonline.menjs.mongodb.net/mobileshop?retryWrites=true&w=majority）
+MONGO_URI = 你自己的 mongodb uri /（应用测试使用：mongodb+srv://admin:admin@react-shop.lydooyw.mongodb.net/?retryWrites=true&w=majority&appName=react-shop）
 JWT_SECRET = 'abc123'
 PAYPAL_CLIENT_ID = 你的 paypal client id
 
